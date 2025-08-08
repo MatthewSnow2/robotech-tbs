@@ -29,3 +29,11 @@ Personal fan project (non-commercial). Windows, mouse/keyboard. Built with Unity
 
 ## Legal Note
 Robotech and Palladium content belong to their respective rights holders. This project is a personal, non-commercial fan work.
+
+## Non-Commercial Notice / License Intent
+- This repository is public so others can see the code, learn, and contribute.
+- Forking and cloning are permitted for personal, non-commercial purposes.
+- No commercial use, redistribution of copyrighted IP assets, or monetization is permitted.
+- If you contribute, you agree your contributions are also non-commercial and may be removed if requested by rights holders.
+
+If you are a rights holder and wish content to be removed or altered, please open an issue.
