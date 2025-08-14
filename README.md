@@ -27,6 +27,19 @@ Personal fan project (non-commercial). Windows, mouse/keyboard. Built with Unity
 3. Implement ScriptableObject schemas for Units, Terrain, Tech, Districts
 4. Prototype one map and a small unit subset for combat loop
 
+## Build/Run
+- Unity: 2022.3.39f1
+- Open the project via Unity Hub and load the scene at `Assets/Scenes/Bootstrap.unity`.
+- Press Play to verify startup; console should log "Robotech TBS Bootstrap initialized.".
+
+## Tests
+- Unity Test Framework is enabled.
+- EditMode tests live under `Assets/Tests/EditMode`. Run via Unity Test Runner.
+
+## CI
+- GitHub Actions workflow `.github/workflows/unity-ci.yml` runs EditMode tests on push/PR.
+- Windows build job is scaffolded and can be enabled after setting `UNITY_LICENSE` secret.
+
 ## Legal Note
 Robotech and Palladium content belong to their respective rights holders. This project is a personal, non-commercial fan work.
 
