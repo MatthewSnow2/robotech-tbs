@@ -90,3 +90,90 @@ LightingData.asset
 
 # Rider Plugin
 /Assets/Plugins/Editor/JetBrains*
+
+# ============================================================
+# SECURITY: Environment Variables & Secrets
+# ============================================================
+# Prevent accidental commit of sensitive credentials
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+.env.development
+.env.production
+.env.test
+*.env
+
+# API Keys & Credentials
+*.key
+*.pem
+*.p12
+*.pfx
+*.cert
+*.crt
+*.der
+secrets.json
+credentials.json
+apikeys.json
+config.secret.*
+
+# Local configuration overrides
+*.local.json
+*.private.*
+*.private.json
+config.local.*
+settings.local.*
+
+# Authentication tokens
+auth.json
+token.json
+*.token
+
+# Database credentials
+database.json
+connection.json
+
+# Cloud provider credentials
+.aws/
+.gcloud/
+.azure/
+
+# ============================================================
+# ADDITIONAL IDE SUPPORT
+# ============================================================
+
+# Visual Studio Code
+.vscode/
+*.code-workspace
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Atom
+.atom/
+
+# Fleet
+.fleet/
+
+# ============================================================
+# ADDITIONAL SECURITY PATTERNS
+# ============================================================
+
+# Backup files that might contain sensitive data
+*.backup
+*.bak
+*.old
+*.orig
+
+# Local notes that might contain passwords
+NOTES.txt
+notes.txt
+TODO.local.*
+passwords.*
+secrets.*
+
+# Test files that might have credentials
+**/test-credentials.*
+**/test-secrets.*
