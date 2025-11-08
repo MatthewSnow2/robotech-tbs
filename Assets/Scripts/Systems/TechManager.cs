@@ -58,6 +58,28 @@ namespace Robotech.TBS.Systems
                 researchedTechs.Add(currentResearch);
             }
 
+            // Apply retroactive unit upgrades if tech has unit stat bonuses
+            if (currentResearch.hpBonus > 0 || currentResearch.armorBonus > 0 ||
+                currentResearch.movementBonus > 0 || currentResearch.attackBonus > 0)
+            {
+                // Find all active units in scene and upgrade them
+                var allUnits = FindObjectsOfType<Units.Unit>();
+                int upgradeCount = 0;
+                foreach (var unit in allUnits)
+                {
+                    if (!unit.HasTechUpgrade(currentResearch))
+                    {
+                        unit.ApplyTechUpgrade(currentResearch);
+                        upgradeCount++;
+                    }
+                }
+
+                if (upgradeCount > 0)
+                {
+                    Debug.Log($"All {upgradeCount} units upgraded by {currentResearch.displayName}");
+                }
+            }
+
             // Handle era transition
             if (currentResearch.allowsEraTransition && currentResearch.generation == currentGeneration)
             {
