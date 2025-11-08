@@ -2,6 +2,22 @@ using UnityEngine;
 
 namespace Robotech.TBS.Data
 {
+    public enum TechGeneration
+    {
+        Gen0,  // Initial/Starting era
+        Gen1,  // Early game
+        Gen2,  // Mid game
+        Gen3   // Late game
+    }
+
+    public enum TechCategory
+    {
+        Military,
+        Science,
+        Infrastructure,
+        Special
+    }
+
     [CreateAssetMenu(fileName = "TechDefinition", menuName = "Robotech/Data/Tech Definition", order = 10)]
     public class TechDefinition : ScriptableObject
     {
