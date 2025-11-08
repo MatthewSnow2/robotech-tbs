@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Robotech.TBS.Data
@@ -35,6 +36,18 @@ namespace Robotech.TBS.Data
         [Header("Economy")]
         public int buildCostMaterials = 20;
         public int upkeepProtoculture = 0;
+
+        [Header("Tech Requirements")]
+        /// <summary>
+        /// Technology required to produce this unit. If null, unit is available from the start.
+        /// </summary>
+        public TechDefinition requiredTech;
+
+        /// <summary>
+        /// Technologies that provide bonuses to this unit type when researched.
+        /// This is informational only - the actual upgrade logic is handled by Unit.cs.
+        /// </summary>
+        public List<TechDefinition> techUpgrades = new();
 
         [TextArea]
         public string description;
