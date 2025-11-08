@@ -99,15 +99,125 @@ namespace Robotech.TBS.Bootstrap
 
             // Hook turns
             TurnManager.OnTurnStarted += OnTurnStarted;
-            // Minimal tech setup
-            var techArmored = ScriptableObject.CreateInstance<TechDefinition>();
-            techArmored.techId = "armored_veritech"; techArmored.displayName = "Armored Veritech"; techArmored.costScience = 60; techArmored.unlockArmoredVeritech = true;
-            var techSuper = ScriptableObject.CreateInstance<TechDefinition>();
-            techSuper.techId = "super_veritech"; techSuper.displayName = "Super Veritech"; techSuper.costScience = 90; techSuper.unlockSuperVeritech = true;
-            techManager.techTree.Add(techArmored);
-            techManager.techTree.Add(techSuper);
-            techManager.SetResearch(techArmored);
+
+            // Initialize tech tree
+            InitializeTechTree();
+        }
+
+        private void InitializeTechTree()
+        {
+            // Gen 0 Techs (8 total) - No prerequisites
+            var jetPropulsion = DefinitionsFactory.CreateTech(
+                "jet_propulsion", "Jet Propulsion", 10, TechGeneration.Gen0, TechCategory.Aerospace,
+                "Advanced jet engine technology for high-speed flight.",
+                isCriticalPath: true);
+
+            var conventionalBallistics = DefinitionsFactory.CreateTech(
+                "conventional_ballistics", "Conventional Ballistics", 15, TechGeneration.Gen0, TechCategory.Weapons,
+                "Standard projectile weapons and gun pods.");
+
+            var protocultureDiscovery = DefinitionsFactory.CreateTech(
+                "protoculture_discovery", "Protoculture Discovery", 20, TechGeneration.Gen0, TechCategory.Special,
+                "Unlocks the secrets of protoculture energy.",
+                isCriticalPath: true, allowsEraTransition: true);
+
+            var reactorMk1 = DefinitionsFactory.CreateTech(
+                "reactor_mk1", "Energy Reactors Mk I", 15, TechGeneration.Gen0, TechCategory.Power,
+                "Basic protoculture reactor systems.")
+                .WithYieldBonus(protoculture: 10);
+
+            var chassisI = DefinitionsFactory.CreateTech(
+                "chassis_i", "Mecha Chassis I", 15, TechGeneration.Gen0, TechCategory.Mecha,
+                "Foundational mecha framework and transformation mechanics.");
+
+            var metallurgyI = DefinitionsFactory.CreateTech(
+                "metallurgy_i", "Metallurgy I", 12, TechGeneration.Gen0, TechCategory.Defense,
+                "Advanced alloys and armor plating.")
+                .WithUnitBonuses(armor: 5);
+
+            var missileGuidanceI = DefinitionsFactory.CreateTech(
+                "missile_guidance_i", "Missile Guidance I", 13, TechGeneration.Gen0, TechCategory.Weapons,
+                "Basic missile targeting systems.");
+
+            var globalComms = DefinitionsFactory.CreateTech(
+                "global_comms", "Global Communications Network", 18, TechGeneration.Gen0, TechCategory.Special,
+                "Worldwide communication and data sharing infrastructure.")
+                .WithYieldBonus(science: 5);
+
+            // Gen 1 Techs (8 total) - With prerequisites
+            var transformationI = DefinitionsFactory.CreateTech(
+                "transformation_i", "Transformation Engineering I", 30, TechGeneration.Gen1, TechCategory.Mecha,
+                "Enables VF-0 prototype production through advanced transformation systems.",
+                isCriticalPath: true)
+                .WithPrerequisites(chassisI);
+
+            var sensorsI = DefinitionsFactory.CreateTech(
+                "sensors_i", "Sensor Suite Integration I", 25, TechGeneration.Gen1, TechCategory.Aerospace,
+                "Integrated sensor systems for improved targeting and reconnaissance.")
+                .WithPrerequisites(jetPropulsion);
+
+            var reactorMk2 = DefinitionsFactory.CreateTech(
+                "reactor_mk2", "Reactor Mk II", 35, TechGeneration.Gen1, TechCategory.Power,
+                "Enhanced protoculture reactor efficiency.")
+                .WithPrerequisites(reactorMk1)
+                .WithYieldBonus(protoculture: 15);
+
+            var chassisII = DefinitionsFactory.CreateTech(
+                "chassis_ii", "Mecha Chassis II", 32, TechGeneration.Gen1, TechCategory.Mecha,
+                "Refined mecha designs with improved structural integrity.")
+                .WithPrerequisites(chassisI);
+
+            var missileControlII = DefinitionsFactory.CreateTech(
+                "missile_control_ii", "Missile Control II", 28, TechGeneration.Gen1, TechCategory.Weapons,
+                "Advanced missile guidance and tracking systems.")
+                .WithPrerequisites(missileGuidanceI);
+
+            var advancedMaterials = DefinitionsFactory.CreateTech(
+                "advanced_materials", "Advanced Materials", 30, TechGeneration.Gen1, TechCategory.Defense,
+                "Next-generation composite materials for superior armor.")
+                .WithPrerequisites(metallurgyI)
+                .WithUnitBonuses(armor: 8);
+
+            var radarNetwork = DefinitionsFactory.CreateTech(
+                "radar_network", "Radar Network", 25, TechGeneration.Gen1, TechCategory.Special,
+                "Integrated radar systems for enhanced detection and tracking.")
+                .WithPrerequisites(globalComms);
+
+            var scoutArmor = DefinitionsFactory.CreateTech(
+                "scout_armor", "Scout Armor Program", 22, TechGeneration.Gen1, TechCategory.Mecha,
+                "Lightweight armor system for reconnaissance units.")
+                .WithPrerequisites(chassisI)
+                .WithUnitBonuses(armor: 3);
+
+            // Add all techs to TechManager
+            techManager.allTechs.Add(jetPropulsion);
+            techManager.allTechs.Add(conventionalBallistics);
+            techManager.allTechs.Add(protocultureDiscovery);
+            techManager.allTechs.Add(reactorMk1);
+            techManager.allTechs.Add(chassisI);
+            techManager.allTechs.Add(metallurgyI);
+            techManager.allTechs.Add(missileGuidanceI);
+            techManager.allTechs.Add(globalComms);
+            techManager.allTechs.Add(transformationI);
+            techManager.allTechs.Add(sensorsI);
+            techManager.allTechs.Add(reactorMk2);
+            techManager.allTechs.Add(chassisII);
+            techManager.allTechs.Add(missileControlII);
+            techManager.allTechs.Add(advancedMaterials);
+            techManager.allTechs.Add(radarNetwork);
+            techManager.allTechs.Add(scoutArmor);
+
+            // Update available techs (Gen 0 techs should be immediately available)
+            techManager.UpdateAvailableTechs();
+
+            // Legacy compatibility - add techs to old techTree list
+            techManager.techTree.AddRange(techManager.allTechs);
+
+            // Set up event handlers
             techManager.OnTechCompleted += t => Debug.Log($"Tech completed: {t.displayName}");
+            techManager.OnEraTransition += era => Debug.Log($"Era transition: Advanced to {era}");
+
+            Debug.Log($"Tech tree initialized with {techManager.allTechs.Count} Gen 0-1 techs");
         }
 
         private void OnDestroy()
